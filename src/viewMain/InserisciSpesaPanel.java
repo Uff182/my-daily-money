@@ -1,3 +1,8 @@
+/**
+*
+*@author Andrea Candini <formulauff@gmail.com>
+*/
+
 package viewMain;
 
 import java.awt.event.ActionEvent;

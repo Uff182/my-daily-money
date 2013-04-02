@@ -1,3 +1,8 @@
+/**
+*
+*@author Andrea Candini <formulauff@gmail.com>
+*/
+
 package controller;
 
 import java.sql.Connection;
