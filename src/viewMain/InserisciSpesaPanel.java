@@ -1,12 +1,14 @@
 /**
-*
-*@author Andrea Candini <formulauff@gmail.com>
-*/
+ *
+ *@author Andrea Candini <formulauff@gmail.com>
+ */
 
 package viewMain;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -16,9 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controller.RegistrazioneSpesa;
-
 import model.Spesa;
+import controller.RegistrazioneSpesa;
 
 public class InserisciSpesaPanel extends JPanel implements ActionListener{
 
@@ -27,36 +28,40 @@ public class InserisciSpesaPanel extends JPanel implements ActionListener{
 
 	private JComboBox<String> listaTipologia;
 	private JButton registraSpesa;
-	
+
 	private String tipologiaScelta = null;
-	private float prezzo = 0;
-	
+	private BigDecimal prezzo = null;
+
 	public InserisciSpesaPanel() {
 		super();
+		
 		BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(boxLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		valore = new JLabel("Valore:");
 		valore.setAlignmentX(CENTER_ALIGNMENT);
 		valore.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		
+
 		valoreInserimento = new JTextField();
 		valoreInserimento.setAlignmentX(CENTER_ALIGNMENT);
 		valoreInserimento.setHorizontalAlignment(JTextField.CENTER);
 		valoreInserimento.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		
+
 		tipologia = new JLabel("Tipologia:");
 		tipologia.setAlignmentX(CENTER_ALIGNMENT);
 		tipologia.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		
+
+		//Ricevo le tipologie dinamicamente, così da avere la lista
+		//sempre aggiornata in caso di login da macchine differenti
+		RegistrazioneSpesa reg = new RegistrazioneSpesa();
+		String[] listaTipologie = reg.aggiornaListaTipologia();
 		listaTipologia = new JComboBox<String>();
-		listaTipologia.addItem("Seleziona...");
-		listaTipologia.addItem("Alimentari");
-		listaTipologia.addItem("Ricarica cellulare");
-		listaTipologia.addItem("SKY");
+		for(int i = 0; i < listaTipologie.length; i++) {
+			listaTipologia.addItem(listaTipologie[i]);
+		}
 		listaTipologia.addActionListener(this);
 		listaTipologia.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		
+
 		registraSpesa = new JButton("Salva");
 		registraSpesa.addActionListener(this);
 		registraSpesa.setAlignmentX(CENTER_ALIGNMENT);
@@ -73,18 +78,19 @@ public class InserisciSpesaPanel extends JPanel implements ActionListener{
 			tipologiaScelta = listaTipologia.getItemAt(listaTipologia.getSelectedIndex());
 		}
 		if (evento == registraSpesa) {
-			
+
 			//Controllo che il numero inserito sia corretto. Va ampliato:
 			//devo essere sicuro che ci siano al massimo 2 decimali e che
 			//il formato sia riconosciuto correttamente a seconda del paese
 			try {
-			prezzo = Float.parseFloat(getValoreInserimento());
+				String valoreDaConvertire = convertiSpesa(getValoreInserimento());
+				prezzo = new BigDecimal(valoreDaConvertire);
 			} catch (NumberFormatException nfe) {
 				JOptionPane.showMessageDialog(this, "Inserire solo numeri.",
 						"Prezzo non valido", JOptionPane.ERROR_MESSAGE);
 			}
 			//Invia la spesa al database
-			if (tipologiaScelta != null && prezzo != 0) {
+			if (tipologiaScelta != null && !prezzo.equals(new BigDecimal(0))) {
 				Spesa spesa = new Spesa(prezzo, tipologiaScelta);
 				RegistrazioneSpesa rSpesa = new RegistrazioneSpesa(spesa);
 				boolean registrazioneEffettuata = rSpesa.effettuaRegistrazione();
@@ -97,8 +103,45 @@ public class InserisciSpesaPanel extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
+
+	//Il metodo parseFloat non riconosce la cultura locale, come tale
+	//è necessario fornirgli la stringa nel formato che si aspetta
+	private String convertiSpesa(String valoreDaConvertire) {
+
+		int lunghezza = valoreDaConvertire.length();
+		String risultato = "";
+
+		for(int i = 0; i < lunghezza; i++) {
+			String c = "" + valoreDaConvertire.charAt(i);
+
+			//Copio tutti i valori fino ai decimali se non sono '.' o ','
+			if (!c.equals(",") && !c.equals(".") && i < lunghezza - 3)
+				risultato += c;
+
+			//Gestisco la virgola o il punto dei decimali
+			if (c.equals(",") && i == lunghezza - 3)
+				risultato += ".";
+			else if (c.equals(".") && i == lunghezza - 3)
+				risultato += c;
+			else if (i == lunghezza - 3)
+				risultato += c;
+
+			if (c.equals(",") && i == lunghezza - 2)
+				risultato += ".";
+			else if (c.equals(".") && i == lunghezza - 2)
+				risultato += c;
+			else if (i == lunghezza - 2)
+				risultato += c;
+
+			if (i == lunghezza - 1)
+				risultato += c;
+		}
+
+		return risultato;
+	}
+
 	public String getValoreInserimento() {
 		return valoreInserimento.getText();
 	}
+
 }

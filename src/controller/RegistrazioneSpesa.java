@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,12 +25,28 @@ public class RegistrazioneSpesa {
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
+	private String name = "adminSpese", password = "adminSpese";
 
+	public RegistrazioneSpesa() {
+		String url = "jdbc:mysql://localhost/gestione_spese";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			con = DriverManager.getConnection(url, name, password);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public RegistrazioneSpesa(Spesa spesa) {
 		this.spesa = spesa;
 		String url = "jdbc:mysql://localhost/gestione_spese";
-		String name = "adminSpese";
-		String password = "adminSpese";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -68,7 +85,7 @@ public class RegistrazioneSpesa {
 
 			pstmt.setInt(1, id);
 			pstmt.setTimestamp(2, timestamp);
-			pstmt.setFloat(3, spesa.getPrezzo());
+			pstmt.setBigDecimal(3, spesa.getPrezzo());
 			pstmt.setString(4, spesa.getTipologia());
 			pstmt.execute();
 
@@ -101,5 +118,62 @@ public class RegistrazioneSpesa {
             }
 		}
 		return registrazioneEffettuata;
+	}
+
+	public String[] aggiornaListaTipologia() {
+		
+		String[] listaTipologia = null;
+		
+		//Ottengo l'id da utilizzare per la registrazione
+		try {
+			
+			//Per prima cosa conto quante entry ho
+			pstmt = con.prepareStatement("SELECT next_value " + 
+					"FROM sequence_tipologia");
+			rs = pstmt.executeQuery();
+			int id = -1;
+			while (rs.next()) {
+				id = rs.getInt(1);
+			}
+			listaTipologia = new String[id-1];
+			
+			//Seleziono tutte le tipologie di spese
+			pstmt = con.prepareStatement("SELECT * " + 
+					"FROM tipologia");
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				id = rs.getInt(1);
+				listaTipologia[id-1] = rs.getString(2);
+			}
+			
+			//Ordino la stringa ottenuta
+			Arrays.sort(listaTipologia);
+			
+			rs.close();
+			pstmt.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			//In caso di errore ritorno null
+			listaTipologia = null;
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException ex) {
+				listaTipologia = null;
+            }
+		}
+		
+		return listaTipologia;
+		
 	}
 }

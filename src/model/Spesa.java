@@ -1,16 +1,18 @@
 package model;
 
+import java.math.BigDecimal;
+
 public class Spesa {
 
-	private float prezzo = -1;
+	private BigDecimal prezzo = null;
 	private String tipologia = null;
 	
-	public Spesa(float prezzo, String tipologia) {
+	public Spesa(BigDecimal prezzo, String tipologia) {
 		this.prezzo = prezzo;
 		this.tipologia = tipologia;
 	}
 
-	public float getPrezzo() {
+	public BigDecimal getPrezzo() {
 		return prezzo;
 	}
 
