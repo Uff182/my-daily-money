@@ -15,6 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import controller.CentraFrame;
 
 public class IntroFrame extends JFrame{
@@ -23,6 +26,19 @@ public class IntroFrame extends JFrame{
 	
 	public IntroFrame(String titolo) {
 		super(titolo);
+		
+		try {
+			UIManager.setLookAndFeel(
+			        UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		
 		//Creazione di un layout apposito per disporre i contenuti
 		LayoutManager layout = new FlowLayout();

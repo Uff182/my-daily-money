@@ -13,12 +13,12 @@ package viewLogin;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public abstract class AccessPanel extends JPanel{
 	
 	protected JLabel username, password;
-	protected JTextArea usernameInserimento;
+	protected JTextField usernameInserimento;
 	protected JPasswordField passwordInserimento;
 	
 	public abstract String getNomeUtente();

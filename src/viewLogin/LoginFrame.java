@@ -13,20 +13,19 @@ import controller.CentraFrame;
 public class LoginFrame extends JFrame{
 
 	private LoginPanel loginPanel;
+	private JFrame frame;
 	private ConfermaPanel confermaPanel;
-	private JFrame introFrame;
 	private CentraFrame centraFrame;
 
-	public LoginFrame(String titolo, JFrame introFrame) {
+	public LoginFrame(String titolo, JFrame frame) {
 		super(titolo);
-		this.introFrame = introFrame;
-
+		this.frame = frame;
 		LayoutManager layoutFrame = new GridLayout(2,1);
 		this.setLayout(layoutFrame);
 		
 		loginPanel = new LoginPanel();
 		getContentPane().add(loginPanel);
-		confermaPanel = new ConfermaPanel("Login", introFrame, loginPanel);
+		confermaPanel = new ConfermaPanel("Login", frame, loginPanel);
 		getContentPane().add(confermaPanel);
 		this.pack();
 		setVisible(true);

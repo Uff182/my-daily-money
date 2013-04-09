@@ -8,24 +8,23 @@ package viewMain;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
-
 import controller.CentraFrame;
 
 public class MainFrame extends JFrame{
 
 	public MainFrame() {
 		
-		MainMenuTop north, center, west, south;
+		MainMenuTop center, west, south;
 		InserisciSpesaPanel east;
-		north = new MainMenuTop("Nord");
-		center = new MainMenuTop("Centro");
+		BarraMenu north;
 		east = new InserisciSpesaPanel();
+		north = new BarraMenu(this, east);
+		center = new MainMenuTop("Centro");
 		west = new MainMenuTop("Ovest");
 		south = new MainMenuTop("Sud");
 		CentraFrame cf = new CentraFrame(this, 350, 300, true);
 		BorderLayout layout = new BorderLayout();
 		this.setLayout(layout);
-		
 		getContentPane().add(north, BorderLayout.NORTH);
 		getContentPane().add(center, BorderLayout.CENTER);
 		getContentPane().add(east, BorderLayout.EAST);

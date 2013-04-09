@@ -5,6 +5,7 @@
 
 package viewMain;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -13,11 +14,11 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import model.Spesa;
 import controller.RegistrazioneSpesa;
 
@@ -31,7 +32,8 @@ public class InserisciSpesaPanel extends JPanel implements ActionListener{
 
 	private String tipologiaScelta = null;
 	private BigDecimal prezzo = null;
-
+	private String[] listaTipologie = null;
+	
 	public InserisciSpesaPanel() {
 		super();
 		
@@ -53,8 +55,7 @@ public class InserisciSpesaPanel extends JPanel implements ActionListener{
 
 		//Ricevo le tipologie dinamicamente, così da avere la lista
 		//sempre aggiornata in caso di login da macchine differenti
-		RegistrazioneSpesa reg = new RegistrazioneSpesa();
-		String[] listaTipologie = reg.aggiornaListaTipologia();
+		listaTipologie = aggiornaListaTipologia();
 		listaTipologia = new JComboBox<String>();
 		for(int i = 0; i < listaTipologie.length; i++) {
 			listaTipologia.addItem(listaTipologie[i]);
@@ -140,8 +141,27 @@ public class InserisciSpesaPanel extends JPanel implements ActionListener{
 		return risultato;
 	}
 
+	public String[] aggiornaListaTipologia() {
+		RegistrazioneSpesa reg = new RegistrazioneSpesa();
+		return reg.aggiornaListaTipologia();
+	}
+	
 	public String getValoreInserimento() {
 		return valoreInserimento.getText();
+	}
+	
+	public void setValoreInserimento() {
+		valoreInserimento.setText("20");
+	}
+
+	//Metodo invocato per aggiornare il Panel con la
+	//nuova tipologia inserita
+	public void aggiornaInserisciSpesa(JFrame frame,
+			InserisciSpesaPanel inserisciPanel) {
+		frame.getContentPane().remove(inserisciPanel);
+		frame.add(new InserisciSpesaPanel(), BorderLayout.EAST);
+		frame.getContentPane().invalidate();
+		frame.getContentPane().validate();
 	}
 
 }

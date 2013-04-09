@@ -16,11 +16,11 @@ import javax.swing.JPanel;
 public class IntroPanel extends JPanel implements ActionListener{
 
 	private JButton login, registrazione, esci;
-	private JFrame introPanel;
+	private JFrame introFrame;
 	
 	public IntroPanel(JFrame introPanel) {
 
-		this.introPanel = introPanel;
+		this.introFrame = introPanel;
 		login = new JButton("Login");
 		registrazione = new JButton("Registrazione");
 		esci = new JButton("Esci");
@@ -40,7 +40,7 @@ public class IntroPanel extends JPanel implements ActionListener{
 		Object pulsantePremuto = e.getSource();
 		
 		if (pulsantePremuto == login) {
-			JFrame login = new LoginFrame("Pannello di login", introPanel);
+			JFrame login = new LoginFrame("Pannello di login", introFrame);
 		}
 		else if (pulsantePremuto == esci) System.exit(0);
 		else if (pulsantePremuto == registrazione) {

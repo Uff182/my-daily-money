@@ -6,9 +6,8 @@
 package viewLogin;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class LoginPanel extends AccessPanel{
 	
@@ -16,7 +15,7 @@ public class LoginPanel extends AccessPanel{
 		
 
 		username = new JLabel("Nome utente: ");
-		usernameInserimento = new JTextArea();
+		usernameInserimento = new JTextField();
 		usernameInserimento.setColumns(20);
 		add(username); add(usernameInserimento);
 

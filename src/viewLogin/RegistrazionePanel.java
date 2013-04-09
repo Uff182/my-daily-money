@@ -13,12 +13,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 
 public class RegistrazionePanel extends AccessPanel implements DocumentListener, MouseListener{
 
@@ -40,7 +39,7 @@ public class RegistrazionePanel extends AccessPanel implements DocumentListener,
 		confermaPassword = new JLabel("Conferma password: ");
 		
 		//Inizializzazione interazione con l'utente
-		usernameInserimento = new JTextArea("Inserisci il tuo nome utente");
+		usernameInserimento = new JTextField("Inserisci il tuo nome utente");
 		usernameInserimento.setEditable(true);
 		passwordInserimento = new JPasswordField();
 		passwordInserimento.setEditable(true);

@@ -44,7 +44,10 @@ public class ConfermaPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		Object pulsantePremuto = e.getSource();
 
-		if (pulsantePremuto == annulla) frame.dispose();
+		if (pulsantePremuto == annulla) {
+			JFrame frameParent = (JFrame)SwingUtilities.getRoot(this);
+			frameParent.dispose();
+		}
 		if (pulsantePremuto == conferma) {
 			
 			// Registrazione utente
@@ -84,10 +87,10 @@ public class ConfermaPanel extends JPanel implements ActionListener{
 				}
 				if (loginEffettuato.equals("LOGIN_ERRATO")) 
 					JOptionPane.showMessageDialog(this, "I dati inseriti non sono corretti",
-							"Errore", JOptionPane.ERROR_MESSAGE);;
+							"Errore", JOptionPane.ERROR_MESSAGE);
 				if (loginEffettuato.equals("UTENTE_NON_REGISTRATO"))
 					JOptionPane.showMessageDialog(this, "Utente non registrato",
-							"Errore", JOptionPane.ERROR_MESSAGE);;
+							"Errore", JOptionPane.ERROR_MESSAGE);
 			}
 			else {
 				JOptionPane.showMessageDialog(this, "Richiesta sconosciuta",
